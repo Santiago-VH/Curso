@@ -77,13 +77,18 @@ public class Curso {
 		}
 	}
 	
-	public void pintarEstudiantes() {
+	public String pintarEstudiantes() {
 		String codigo = "";
-		Estudiante temp;
-		temp = primerEstudiante;
-		while(!codigo.equals(ultimoEstudiante.getCodigo())) {
-			System.out.println();
+		String result = "";
+		Estudiante temp = primerEstudiante;
+		while(!codigo.equalsIgnoreCase(ultimoEstudiante.getCodigo())) {
+			result += temp.toString() + "\n";
+			temp = temp.getSiguiente();
+			codigo = temp.getCodigo();
 		}
+		
+		result += temp.toString();
+		return result;
 	}
 	
 	
