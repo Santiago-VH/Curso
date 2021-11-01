@@ -11,6 +11,7 @@ public class Curso {
 	public Curso(String nombre, int numEstudiantes) {
 		this.nombre=nombre;
 		this.numEstudiantes=numEstudiantes;
+		this.ultimoEstudiante=null;                                                                                                                                         
 	}
 	
 	public Curso(String nombre, int numEstudiantes, Estudiante primerEstudiante) {
@@ -41,55 +42,86 @@ public class Curso {
 		this.primerEstudiante = primerEstudiante;
 	}
 	
-	public void addEstudiante (Estudiante newStudent) { //Añadir estudiante de primeras
+	public void addEstudiante (Estudiante newStudent1) {
+		Estudiante newStudent = new Estudiante(newStudent1.getCodigo(), newStudent1.getNombre());
+		System.out.println("Ingresa metodo");
+		@SuppressWarnings("unused")
+		Estudiante current=null;
+		Estudiante current2=null;
 		if(primerEstudiante==null) {
+			newStudent.setSiguiente(newStudent);
+			newStudent.setAnterior(newStudent);
 			primerEstudiante=newStudent;
-			ultimoEstudiante=primerEstudiante;
-			primerEstudiante.setSiguiente(ultimoEstudiante);
-			ultimoEstudiante.setAnterior(primerEstudiante);
-		}else {
+			ultimoEstudiante=newStudent;
+		} else {
+			current=primerEstudiante.getAnterior();
 			newStudent.setSiguiente(primerEstudiante);
 			primerEstudiante.setAnterior(newStudent);
-			newStudent.setAnterior(ultimoEstudiante);
-			ultimoEstudiante.setSiguiente(newStudent);
-			primerEstudiante=newStudent;
-		}
-	}
-	
-	public void addEstudianteOrdenadamente (Estudiante newStudent) {
-		if(primerEstudiante==null) {
-			primerEstudiante=newStudent;
-			ultimoEstudiante=primerEstudiante;
-			primerEstudiante.setSiguiente(ultimoEstudiante);
-			ultimoEstudiante.setAnterior(primerEstudiante);
-	} else if(primerEstudiante==ultimoEstudiante) {
-		primerEstudiante.setSiguiente(newStudent);
-		newStudent.setAnterior(primerEstudiante);
-		ultimoEstudiante=newStudent;
-		ultimoEstudiante.setSiguiente(primerEstudiante);
-		primerEstudiante.setAnterior(ultimoEstudiante);
-		} else {
-			ultimoEstudiante.setSiguiente(newStudent);
-			newStudent.setAnterior(ultimoEstudiante);
+			current2=ultimoEstudiante;
+			current2.setSiguiente(newStudent);
+			newStudent.setAnterior(current2);
 			ultimoEstudiante=newStudent;
-			ultimoEstudiante.setSiguiente(primerEstudiante);
-			primerEstudiante.setAnterior(ultimoEstudiante);
+		} 
+		
+			System.out.println("Ciclo");
+	}
+	
+	public void pintarEstudiantes() {
+		Estudiante current = primerEstudiante;
+		while(current!=null) {
+			System.out.println(current.getNombre());
+			System.out.println(current.getCodigo()+"\n" );
+			current = current.getSiguiente();
+			if(current==primerEstudiante) {
+				break;
+			}
 		}
 	}
 	
-	public String pintarEstudiantes() {
-		String codigo = "";
-		String result = "";
-		Estudiante temp = primerEstudiante;
-		while(!codigo.equalsIgnoreCase(ultimoEstudiante.getCodigo())) {
-			result += temp.toString() + "\n";
-			temp = temp.getSiguiente();
-			codigo = temp.getCodigo();
+	public int eliminarEstudiante(String n) {
+		int count = 0;
+		Estudiante current = primerEstudiante;
+		Estudiante temp = null;
+		while(current != null){
+			System.out.println("entra while");
+			if(primerEstudiante.getNombre().equals(n)) {
+				System.out.println("entra en condicional 1");
+				temp=current.getAnterior();
+				current = current.getSiguiente();
+				current.setAnterior(null);
+				current.setAnterior(temp);
+				temp.setSiguiente(current);
+				primerEstudiante = current;
+				count++;
+				break;
+			}else if(current.getNombre().equals(n)) {
+				if(current == ultimoEstudiante) {
+					System.out.println("entra en condicional 2");
+					temp=current.getAnterior();
+					current = current.getSiguiente();
+					current.setAnterior(null);
+					current.setAnterior(temp);
+					temp.setSiguiente(current);
+					ultimoEstudiante = temp;
+					count++;
+					break;
+				}else {
+				System.out.println("entra en condicional 3");
+				temp=current.getAnterior();
+				current = current.getSiguiente();
+				current.setAnterior(null);
+				current.setAnterior(temp);
+				temp.setSiguiente(current);
+				count++;
+				break;
+				}
+			}
+			current = current.getSiguiente();
 		}
-		
-		result += temp.toString();
-		return result;
+		return count;
 	}
+	
+	
 	
 	
 }
